@@ -15,4 +15,4 @@ class Console {
     }
 }
 
-module.exports.Console = Console;
+module.exports = Console;

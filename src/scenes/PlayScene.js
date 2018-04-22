@@ -61,4 +61,4 @@ class PlayScene {
 
 }
 
-module.exports.PlayScene = PlayScene;
+module.exports = PlayScene;

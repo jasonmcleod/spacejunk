@@ -4,4 +4,4 @@ class Blueprint {
     }
 }
 
-module.exports.Blueprint = Blueprint;
+module.exports = Blueprint;

@@ -1,5 +1,5 @@
 const blessed = require('blessed');
-const Console = require('./Console').Console;
+const Console = require('./Console');
 
 class TelnetClient {
     constructor(client) {

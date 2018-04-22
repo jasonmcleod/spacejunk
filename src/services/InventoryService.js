@@ -14,4 +14,4 @@ class InventoryService {
     }
 }
 
-module.exports.InventoryService = InventoryService;
+module.exports = InventoryService;

@@ -8,4 +8,4 @@ class RoomService {
     search(inv, item) {}
 }
 
-module.exports.RoomService = RoomService;
+module.exports = RoomService;

@@ -4,4 +4,4 @@ class Room {
     }
 }
 
-module.exports.Room = Room;
+module.exports = Room;

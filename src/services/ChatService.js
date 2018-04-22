@@ -12,4 +12,4 @@ class ChatService {
 
 }
 
-module.exports.ChatService = ChatService;
+module.exports = ChatService;

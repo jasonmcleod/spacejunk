@@ -121,4 +121,4 @@ class LoginScene {
     }
 }
 
-module.exports.LoginScene = LoginScene;
+module.exports = LoginScene;

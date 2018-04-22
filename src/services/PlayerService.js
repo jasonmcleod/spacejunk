@@ -1,4 +1,4 @@
-const Player = require('../classes/Player').Player;
+const Player = require('../classes/Player');
 
 class PlayerService {
     constructor(game) {
@@ -35,4 +35,4 @@ class PlayerService {
     }
 }
 
-module.exports.PlayerService = PlayerService;
+module.exports = PlayerService;

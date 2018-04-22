@@ -35,4 +35,4 @@ class CommandService {
     }
 }
 
-module.exports.CommandService = CommandService;
+module.exports = CommandService;

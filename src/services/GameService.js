@@ -1,11 +1,11 @@
-const InventoryService = require('./InventoryService').InventoryService;
-const RoomService = require('./RoomService').RoomService;
-const CommandService = require('./CommandService').CommandService;
-const PlayerService = require('./PlayerService').PlayerService;
-const ChatService = require('./ChatService').ChatService;
+const InventoryService = require('./InventoryService');
+const RoomService = require('./RoomService');
+const CommandService = require('./CommandService');
+const PlayerService = require('./PlayerService');
+const ChatService = require('./ChatService');
 
-const LoginScene = require('../scenes/LoginScene').LoginScene;
-const PlayScene = require('../scenes/PlayScene').PlayScene;
+const LoginScene = require('../scenes/LoginScene');
+const PlayScene = require('../scenes/PlayScene');
 
 const scenes = {
     login: LoginScene,
@@ -42,4 +42,4 @@ class GameService {
     }
 }
 
-module.exports.GameService = GameService;
+module.exports = GameService;
