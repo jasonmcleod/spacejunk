@@ -1,6 +1,10 @@
 class Blueprint {
-    constructor() {
+    constructor(props) {
+        Object.assign(this, props);
+    }
 
+    fullName() {
+        return this.name;
     }
 }
 

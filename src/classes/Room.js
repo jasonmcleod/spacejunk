@@ -1,6 +1,6 @@
 class Room {
-    constructor() {
-
+    constructor(props) {
+        Object.assign(this, props);
     }
 }
 

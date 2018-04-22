@@ -40,4 +40,35 @@ module.exports.load = (game) => {
         action: (client, input) => { client.console.add(`Position: ${client.player.x}, ${client.player.y}`)}
     });
 
+    // movement
+    game.commandService.add('go', {
+        alias: ['move', 'head', 'travel', 'walk'],
+        tip: 'Move in any direction (north | n, south | s, east | e, west | w)',
+        action: (client, input) => game.playerService.parseMovement(client, input)
+    });
+
+    game.commandService.add('north', {
+        alias: ['n'],
+        tip: 'Move north',
+        action: (client, input) => game.playerService.parseMovement(client, 'north')
+    });
+
+    game.commandService.add('south', {
+        alias: ['s'],
+        tip: 'Move south',
+        action: (client, input) => game.playerService.parseMovement(client, 'south')
+    });
+
+    game.commandService.add('east', {
+        alias: ['e'],
+        tip: 'Move east',
+        action: (client, input) => game.playerService.parseMovement(client, 'east')
+    });
+
+    game.commandService.add('west', {
+        alias: ['w'],
+        tip: 'Move west',
+        action: (client, input) => game.playerService.parseMovement(client, 'west')
+    });
+
 };
