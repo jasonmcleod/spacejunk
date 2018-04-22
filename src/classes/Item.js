@@ -4,13 +4,17 @@ class Item {
     }
 
     fullName() {
+        
         let out = '';
         if(this.attributes) {
             this.attributes.forEach((a) => {
                 out+= this[a] + ' ';
             });           
         }
-        out+= this.name;
+        
+        out+= this.base.name;
+
+        return out;
     }
 }
 

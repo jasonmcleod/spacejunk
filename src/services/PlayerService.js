@@ -2,19 +2,21 @@ const Player = require('../classes/Player');
 
 class PlayerService {
     constructor(game) {
-        this._game = game;
+        this.game = game;
     }
 
     login(client, username, password, callback) {
         callback({success: true});
         client.authenticated = true;
         client.player = new Player();
-        this._game.setScene(client, 'play');
+        this.setPosition(client, client.player.x, client.player.y);
+        this.game.setScene(client, 'play');
     }
 
     setPosition(client, x, y) {
         client.player.x = x;
         client.player.y = y;
+        client.player.room = this.game.roomService.get(x, y);
     }
 
     parseMovement(client, input) {

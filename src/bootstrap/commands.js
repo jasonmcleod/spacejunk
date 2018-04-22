@@ -32,7 +32,7 @@ module.exports.load = (game) => {
     game.commandService.add('wipe', {
         alias: ['reset'],
         tip: 'Load state from disk',
-        action: (client, args) => game.reset()
+        action: (client, args) => game.wipe()
     });
 
     game.commandService.add('pos', {
@@ -69,6 +69,43 @@ module.exports.load = (game) => {
         alias: ['w'],
         tip: 'Move west',
         action: (client, input) => game.playerService.parseMovement(client, 'west')
+    });
+
+
+    // room
+    game.commandService.add('search', {
+        alias: ['scan'],
+        tip: 'Search the area',
+        action: (client, input) => game.roomService.search(client)
+    });
+
+    game.commandService.add('take', {
+        alias: ['get', 'grab'],
+        tip: 'Take an item from the area',
+        action: (client, input) => {
+            const found = game.itemService.searchFor(client.player.room.items, input);
+            if(found!==false) {
+                client.console.add(`You pick up ${client.player.room.items[found].fullName()}`);
+                game.itemService.take(client, client.player.room.items, found);                
+            } else {
+                client.console.add(`Can't find that.`);
+            }
+        }
+    });
+
+    game.commandService.add('bag', {
+        alias: ['inventory'],
+        tip: `Review what's in your inventory`,
+        action: (client, input) => {
+            if(client.player.inventory.length) {
+                client.console.add(`You open your bag to find ${client.player.inventory.length} items:`);
+                client.player.inventory.forEach((item) => {
+                    client.console.add(item.fullName());
+                });
+            } else {
+                client.console.add('You have nothing in your bag.');
+            }
+        }
     });
 
 };

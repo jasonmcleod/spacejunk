@@ -1,3 +1,4 @@
+const C = require('../constants');
 const Item = require('../classes/Item');
 const Blueprint = require('../classes/Blueprint');
 
@@ -55,12 +56,14 @@ class ItemService {
     }
 
     createItem(container, containerType) {
-        let base = this.game.state.baseItems[range(0, this.game.state.baseItems.length-1)];
+        let base = this.game.state.items[range(0, this.game.state.items.length-1)];
         const item = {base};
-        base.attributes.forEach((attr, i) => {
-            let pick = range(0, variance[attr].length);
-            item[attr] = variance[attr][pick];
-        });
+        if(base.attributes) {
+            base.attributes.forEach((attr, i) => {
+                let pick = range(0, this.game.state.attributes[attr].length);
+                item[attr] = this.game.state.attributes[attr][pick];
+            });
+        }
 
         this.game.save();
 
@@ -97,6 +100,30 @@ class ItemService {
             }
         });
         return total;
+    }
+
+    searchFor(source, search) {
+        let index = false;
+        if(search*1 != search) {
+            for(let i in source) {
+                if(search == source[i].fullName()) {
+                    index = i;
+                    continue;
+                }
+            }
+        } else {
+            if(search > source.length) {            
+                return;
+            } else {
+                index = search - 1;
+            }
+        }
+        return index;
+    }
+
+    take(client, source, item) {       
+        client.player.inventory.push(source[item]);
+        source.splice(item, 1);
     }
 }
 

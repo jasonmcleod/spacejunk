@@ -10,6 +10,7 @@ const InventoryService = require('./InventoryService');
 const PlayScene = require('../scenes/PlayScene');
 const LoginScene = require('../scenes/LoginScene');
 
+const Room = require('../classes/Room');
 const Item = require('../classes/Item');
 const Blueprint = require('../classes/Blueprint');
 
@@ -34,6 +35,7 @@ class GameService {
         this.inventoryService = new InventoryService(this);
 
         this.state = {
+            rooms:[],
             items: [],
             blueprints: [],
             attributes: {}
@@ -52,7 +54,11 @@ class GameService {
     save() {
         const payload = JSON.stringify(this.state);
         fs.writeFileSync(path.resolve(__dirname, '../../data/data.json'), payload);
-        console.log('save');
+    }
+
+    wipe() {
+        fs.writeFileSync(path.resolve(__dirname, '../../data/data.json'), '');
+        console.log('DESTROYED ALL GAME DATA');
     }
 
     load() {
@@ -62,7 +68,7 @@ class GameService {
             data = JSON.parse(contents);
         } catch(err) { }
         if(data) {
-            if(data.rooms) this.state.rooms = data.rooms.map(i => new Room(a));
+            if(data.rooms) this.state.rooms = data.rooms.map(i => new Room(i));
             if(data.attributes) this.state.attributes = data.attributes;
             if(data.items) this.state.items = data.items.map(i => new Item(i));
             if(data.blueprints) this.state.blueprints = data.blueprints.map(i => new Blueprint(i));
