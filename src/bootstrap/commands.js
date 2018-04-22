@@ -83,12 +83,28 @@ module.exports.load = (game) => {
         alias: ['get', 'grab'],
         tip: 'Take an item from the area',
         action: (client, input) => {
-            const found = game.itemService.searchFor(client.player.room.items, input);
+            const found = game.itemService.searchFor(client.player.room.inventory, input);
+            console.log(found);
             if(found!==false) {
-                client.console.add(`You pick up ${client.player.room.items[found].fullName()}`);
-                game.itemService.take(client, client.player.room.items, found);                
+                client.console.add(`You pick up ${client.player.room.inventory[found].fullName()}`);
+                game.itemService.take(client, client.player.room.inventory, found);                
             } else {
                 client.console.add(`Can't find that.`);
+            }
+        }
+    });
+
+    game.commandService.add('drop', {
+        alias: ['leave', 'throw'],
+        tip: 'Drop an item from your inventory onto the ground',
+        action: (client, input) => {
+            const found = game.itemService.searchFor(client.player.inventory, input);
+            console.log(found);
+            if(found!==false) {
+                client.console.add(`You drop up ${client.player.inventory[found].fullName()}`);
+                game.itemService.drop(client, client.player.inventory, found);                
+            } else {
+                client.console.add(`You don't have that.`);
             }
         }
     });

@@ -113,7 +113,7 @@ class ItemService {
             }
         } else {
             if(search > source.length) {            
-                return;
+                return false;
             } else {
                 index = search - 1;
             }
@@ -124,6 +124,11 @@ class ItemService {
     take(client, source, item) {       
         client.player.inventory.push(source[item]);
         source.splice(item, 1);
+    }
+
+    drop(client, source, item) {
+        client.player.room.inventory.push(item);
+        client.player.inventory.splice(item, 1);
     }
 }
 
