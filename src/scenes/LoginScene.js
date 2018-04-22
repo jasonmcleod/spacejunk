@@ -1,5 +1,4 @@
 const blessed = require('blessed');
-// const PlayerService = require('../services/PlayerService').PlayerService;
 
 class LoginScene {
     constructor(client, game) {
