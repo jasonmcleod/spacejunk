@@ -1,9 +1,12 @@
 const blessed = require('blessed');
+const Console = require('./Console').Console;
 
 class TelnetClient {
     constructor(client) {
         this.connectionType = 'telnet';
         this.client = client;
+        this.authenticated = false;
+        this.console = new Console(this);
 
         this.screen = blessed.screen({
             smartCSR: true,
