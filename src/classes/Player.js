@@ -1,9 +1,10 @@
 class Player {
-    constructor() {
-        this.x = 0;
-        this.y = 0;
-        this.name = 'Unnamed Player'
-        this.inventory = [];
+    constructor(props) {
+        this.id = props.id;
+        this.x = props.x;
+        this.y = props.y;
+        this.name = props.name;
+        this.inventory = props.inventory || [];
     }
 }
 

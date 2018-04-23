@@ -5,8 +5,8 @@ class ChatService {
     }
 
     send(client, message) {
-        this.game.connections.forEach((client) => {
-            client.console.add(`{cyan-fg}${client.player.name} says{/cyan-fg} ${message}`);
+        this.game.connections.forEach((c) => {
+            c.console.add(`{cyan-fg}${client.player.name} says{/cyan-fg} ${message}`);
         });
     }
 

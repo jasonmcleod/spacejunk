@@ -1,3 +1,4 @@
+const util = require('util');
 module.exports.load = (game) => {
     game.commandService.add('help', {
         alias: ['commands'],
@@ -38,6 +39,11 @@ module.exports.load = (game) => {
     game.commandService.add('pos', {
         tip: 'Show your position',
         action: (client, input) => { client.console.add(`Position: ${client.player.x}, ${client.player.y}`)}
+    });
+
+    game.commandService.add('state', {
+        tip: 'Dump state to console',
+        action: (client, input) => { console.log(util.inspect(game.state, false, 100, true)); }
     });
 
     // movement
@@ -101,7 +107,7 @@ module.exports.load = (game) => {
             const found = game.itemService.searchFor(client.player.inventory, input);
             console.log(found);
             if(found!==false) {
-                client.console.add(`You drop up ${client.player.inventory[found].fullName()}`);
+                client.console.add(`You drop ${client.player.inventory[found].fullName()}`);
                 game.itemService.drop(client, client.player.inventory, found);                
             } else {
                 client.console.add(`You don't have that.`);
@@ -115,8 +121,8 @@ module.exports.load = (game) => {
         action: (client, input) => {
             if(client.player.inventory.length) {
                 client.console.add(`You open your bag to find ${client.player.inventory.length} items:`);
-                client.player.inventory.forEach((item) => {
-                    client.console.add(item.fullName());
+                client.player.inventory.forEach((item, i) => {
+                    client.console.add(`    ${i+1}: ${item.fullName()}`);
                 });
             } else {
                 client.console.add('You have nothing in your bag.');

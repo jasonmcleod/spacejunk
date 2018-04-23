@@ -12,11 +12,9 @@ const LoginScene = require('../scenes/LoginScene');
 
 const Room = require('../classes/Room');
 const Item = require('../classes/Item');
-const Blueprint = require('../classes/Blueprint');
 
 const commands = require('../bootstrap/commands');
 const items = require('../bootstrap/items');
-const blueprints = require('../bootstrap/blueprints');
 const attributes = require('../bootstrap/attributes');
 
 const scenes = {
@@ -37,10 +35,8 @@ class GameService {
         this.state = {
             rooms:[],
             items: [],
-            blueprints: [],
             attributes: {}
         };
-        this.players = {};
         this.connections = [];
         this.attributes = {};
     }
@@ -53,7 +49,11 @@ class GameService {
 
     save() {
         const payload = JSON.stringify(this.state);
-        fs.writeFileSync(path.resolve(__dirname, '../../data/data.json'), payload);
+        fs.writeFileSync(path.resolve(__dirname, '../../data/data.json'), payload);this.connections.forEach((c) => {
+            if(c.authenticated) {
+                this.playerService.save(c);
+            }
+        });
     }
 
     wipe() {
@@ -71,19 +71,21 @@ class GameService {
             if(data.rooms) this.state.rooms = data.rooms.map(i => new Room(i));
             if(data.attributes) this.state.attributes = data.attributes;
             if(data.items) this.state.items = data.items.map(i => new Item(i));
-            if(data.blueprints) this.state.blueprints = data.blueprints.map(i => new Blueprint(i));
             if(data.inventory) this.state.inventory = {};
 
-            for(let i in data.inventory) {
-                this.state.inventory[i] = data.inventory[i].map(i => new Item(i));
-            }
+            this.state.rooms.forEach((room) => {
+                room.inventory = room.inventory.map(i => new Item(i));
+            });
         }
+    }
+
+    setScene(client, scene) {
+        client.scene = new scenes[scene](client, this);
     }
 
     bootstrap() {
         this.load();
 
-        blueprints.load(this);
         attributes.load(this);
         commands.load(this);
         items.load(this);
@@ -93,11 +95,6 @@ class GameService {
         const possibleVariants = this.itemService.calculateVariants();
 
         console.log('Possible item variants:', possibleVariants);
-        console.log('Possible blueprints', this.state.blueprints.length);
-    }
-
-    setScene(client, scene) {
-        client.scene = new scenes[scene](client, this);
     }
 }
 

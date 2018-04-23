@@ -21,7 +21,7 @@ class RoomService {
             let total = C.ALWAYS_FIND_ITEMS ? C.ITEM_COUNT : range(0, C.ITEM_COUNT);
     
             for(let r = 0; r < total; r++) {
-                room.inventory.push(this.game.itemService.select(room, C.CONTAINER_TYPE_ROOM));
+                room.inventory.push(this.game.itemService.createItem(room, C.CONTAINER_TYPE_ROOM));
             }
             this.game.save();
         } else {
@@ -35,7 +35,6 @@ class RoomService {
     search(client) {
         const room = this.get(client.player.x, client.player.y);
         const items = room.inventory;
-
         if(items.length) {
             client.console.add('You search the area and find:');
             for(let i = 0; i < items.length; i++) {

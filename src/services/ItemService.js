@@ -1,6 +1,5 @@
 const C = require('../constants');
 const Item = require('../classes/Item');
-const Blueprint = require('../classes/Blueprint');
 
 class ItemService {
     constructor(game) {
@@ -30,31 +29,6 @@ class ItemService {
         }
     }
 
-    inventBlueprint(props) {
-        if(!props.hasOwnProperty('name')) { console.log(`Itemservice.inventBlueprint: IGNORED blueprint ??? - missing name`); return; };
-        if(!props.hasOwnProperty('items')) { console.log(`Itemservice.inventBlueprint: IGNORED blueprint ${props.name} - missing items array`); return; };
-
-        const workingItem = new Blueprint(props);
-
-        if(!this.game.state.blueprints.find((i) => i.name == workingItem.name)) {
-            this.game.state.blueprints.push(workingItem);
-            console.log(`ItemService.inventBlueprint: ${workingItem.name} invented.`);
-        } else {
-            console.log(`ItemService.inventBlueprint: ${workingItem.name} IGNORED: Already exists.`);
-        }
-    }
-
-    forgetBlueprint(name) {
-        // todo: find all instances in inventory and remove as well
-        const found = this.game.state.blueprints.findIndex((i) => i.name == name);
-        if(found) {
-            this.game.state.blueprints.splice(found, 1);
-            console.log(`ItemService.forgetBlueprint: ${name} forgotten.`);
-        } else {
-            console.log(`ItemService.forgetBlueprint: ${name} IGNORED: Could not find blueprint.`);
-        }
-    }
-
     createItem(container, containerType) {
         let base = this.game.state.items[range(0, this.game.state.items.length-1)];
         const item = {base};
@@ -68,22 +42,6 @@ class ItemService {
         this.game.save();
 
         return new Item(item);
-    }
-
-    createBlueprint(container, containerType) {
-        const bp = this.game.state.blueprints[range(0, this.game.state.blueprints.length-1)];
-        this.game.save();
-        return bp;
-    }
-
-    select(container, containerType) {
-        let rnd = range(0, 100);
-        let blueprint = rnd <= C.BLUEPRINT_CHANCE;
-        if(blueprint) {
-            return this.createBlueprint(container, containerType);
-        } else {
-            return this.createItem(container, containerType);
-        }
     }
 
     calculateVariants() {
@@ -121,14 +79,16 @@ class ItemService {
         return index;
     }
 
-    take(client, source, item) {       
+    take(client, source, item) {    
         client.player.inventory.push(source[item]);
         source.splice(item, 1);
+        this.game.save();
     }
 
     drop(client, source, item) {
-        client.player.room.inventory.push(item);
+        client.player.room.inventory.push(source[item]);
         client.player.inventory.splice(item, 1);
+        this.game.save();
     }
 }
 

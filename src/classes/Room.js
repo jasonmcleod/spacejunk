@@ -1,7 +1,7 @@
 class Room {
     constructor(props) {
         Object.assign(this, props);
-        this.inventory = [];
+        this.inventory = props.inventory || [];
     }
 }
 

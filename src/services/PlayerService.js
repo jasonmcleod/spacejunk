@@ -1,16 +1,58 @@
+const fs = require('fs');
+const path = require('path');
+const dbPath = path.resolve(__dirname, '../../data/database.db');
+const Sequelize = require('sequelize');
+const sequelize = new Sequelize(null, null, null, { dialect: 'sqlite', storage: dbPath});
+
 const Player = require('../classes/Player');
+const Item = require('../classes/Item');
+
+
+
 
 class PlayerService {
     constructor(game) {
         this.game = game;
+
+        this.dbModel = sequelize.define('player', {
+            id: {type: Sequelize.INTEGER, primaryKey: true},
+            name: Sequelize.STRING,
+            password: Sequelize.STRING,
+            x: Sequelize.INTEGER,
+            y: Sequelize.INTEGER,
+            hp: Sequelize.INTEGER,
+            hpMax: Sequelize.INTEGER,
+            inventory: Sequelize.STRING
+        });
     }
 
-    login(client, username, password, callback) {
-        callback({success: true});
-        client.authenticated = true;
-        client.player = new Player();
-        this.setPosition(client, client.player.x, client.player.y);
-        this.game.setScene(client, 'play');
+    login(client, name, password, callback) {
+        this.dbModel.find({where:{name, password}}).then((result) => {
+            if(!result) return callback({success: false, message: 'Invalid credentials'});
+
+            client.authenticated = true;
+            const data = result.dataValues;
+            // todo: hmm i need to make blueprints items i guess?
+            // that or I can make the import logic check the item type and cast it as Item or Blueprint depending on a key
+            data.inventory = JSON.parse(data.inventory).map((i) => new Item(i));
+            console.log(data.inventory);
+            client.player = new Player(data);
+
+            this.setPosition(client, client.player.x, client.player.y);
+            this.game.setScene(client, 'play');
+
+            callback({success: true, character: result.dataValues.id});
+        });
+    }
+
+    save(client) {
+        this.dbModel.update({
+            x: client.player.x,
+            y: client.player.y,
+            hp: client.player.hp,
+            hpMax: client.player.hpMax,
+            inventory: JSON.stringify(client.player.inventory)
+        }, {where: { id: client.player.id }});
     }
 
     setPosition(client, x, y) {
@@ -26,7 +68,7 @@ class PlayerService {
         if(input === 's' || input === 'south') y = 1;
         if(input === 'w' || input === 'west') x = -1;
         if(input === 'e' || input === 'east') x = 1;
-        
+
         const NS = y === 1 ? 'south' : y === 0 ? '' : 'north';
         const EW = x === 1 ? 'east' : x === 0 ? '' : 'west';
 
