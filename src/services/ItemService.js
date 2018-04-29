@@ -30,7 +30,13 @@ class ItemService {
     }
 
     createItem(container, containerType) {
+        // randomize between items and blueprints
+        // if blueprint - we need to generate the random items required to build it
         let base = this.game.state.items[range(0, this.game.state.items.length-1)];
+        console.log('creating item', base);
+        if(base.type === 'blurprint') {
+            console.log('this is a blueprint, we need to generate the random items');
+        }
         const item = {base};
         if(base.attributes) {
             base.attributes.forEach((attr, i) => {
@@ -89,6 +95,26 @@ class ItemService {
         client.player.room.inventory.push(source[item]);
         client.player.inventory.splice(item, 1);
         this.game.save();
+    }
+
+    research(client, search) {
+        const found = this.searchFor(client.player.inventory, search);
+        const item = client.player.inventory[found];
+        if(item) {
+            if(item.base.type === 'blueprint') {
+                console.log(item);
+                client.console.add(`You begin to research the ${item.fullName()} blueprint`);
+                client.console.add(`${item.description()}`);
+                client.console.add(`The materials required to build the ${item.fullName()} include`);
+                // for(let p = 0; p < item.items; p++) {
+                //     client.console.add(`The materials required to build the ${item.fullName()} include`);
+                // }
+            } else {
+                client.console.add(`You begin to research the ${item.fullName()}`);
+            }
+        } else {
+            client.console.add(`Not in your inventory`);
+        }
     }
 }
 

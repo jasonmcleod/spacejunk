@@ -34,13 +34,9 @@ class RoomService {
 
     search(client) {
         const room = this.get(client.player.x, client.player.y);
-        const items = room.inventory;
-        if(items.length) {
+        if(room.inventory.length) {
             client.console.add('You search the area and find:');
-            for(let i = 0; i < items.length; i++) {
-                client.console.add(`    ${i+1}: ${items[i].fullName()}`);
-            }    
-            client.console.add('Type "take <n>" to take an item');
+            this.game.inventoryService.search(client, room.inventory);
         } else {
             client.console.add(`You search the area, but don't find anything useful`);
         }

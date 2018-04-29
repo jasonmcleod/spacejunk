@@ -32,10 +32,8 @@ class PlayerService {
 
             client.authenticated = true;
             const data = result.dataValues;
-            // todo: hmm i need to make blueprints items i guess?
-            // that or I can make the import logic check the item type and cast it as Item or Blueprint depending on a key
-            data.inventory = JSON.parse(data.inventory).map((i) => new Item(i));
-            console.log(data.inventory);
+            const items = JSON.parse(data.inventory || '[]');
+            data.inventory = items.map((i) => new Item(i));
             client.player = new Player(data);
 
             this.setPosition(client, client.player.x, client.player.y);
@@ -76,6 +74,15 @@ class PlayerService {
 
         client.console.add(`You travel ${NS + EW}`);
         client.console.debug(`Position: ${client.player.x}, ${client.player.y}`);
+    }
+
+    search(client) {
+        if(client.player.inventory.length) {
+            client.console.add('You search your inventory and find:');
+            this.game.inventoryService.search(client, client.player.inventory);
+        } else {
+            client.console.add(`Your inventory is empty.`);
+        }
     }
 }
 

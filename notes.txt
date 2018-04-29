@@ -1,0 +1,52 @@
+story:
+the year is 2082
+the earth is covered in trash
+severe storms are extremly common
+debris is constantly flying around and leaving trash all over the terrain
+you were cryogenically frozen sometime around 2020
+the power supply which kept your sleep chamber running has either failed or been stolen
+you awaken with little memory of your past
+your first task is to try to find food and water
+if you happen to get caught in a storm you will need something to protect yourself
+either shelter, or armor, or both.
+
+as you traverse the terrain, you will encounter:   
+    Other players
+    Robots
+    Living creatures
+        Bears
+        Wolves
+        Aligators
+        Vultures
+        
+
+
+
+room terrain
+    wooded
+    wet / dry
+
+
+item attributes - do not change
+item properties - have a tick rate effect
+
+age:
+- meat which has aged will smell worse and attract living creatures
+- meat which has aged will have more of a chance of making you sick
+- scrap metal will rust and become less reliable 
+- batteries will lose some of their capacity
+
+output:
+- applies to batteries (voltage: 1.5v, 9v, 12v) and engines (low powered, high powered)
+
+power:
+- applies to batteries
+- ticks down when device is "on"
+
+
+
+
+
+
+
+

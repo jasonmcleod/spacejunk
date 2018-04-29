@@ -16,6 +16,10 @@ class Item {
 
         return out;
     }
+
+    description() {
+        return this.base.description;
+    }
 }
 
 module.exports = Item;

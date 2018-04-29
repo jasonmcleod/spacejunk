@@ -89,14 +89,7 @@ module.exports.load = (game) => {
         alias: ['get', 'grab'],
         tip: 'Take an item from the area',
         action: (client, input) => {
-            const found = game.itemService.searchFor(client.player.room.inventory, input);
-            console.log(found);
-            if(found!==false) {
-                client.console.add(`You pick up ${client.player.room.inventory[found].fullName()}`);
-                game.itemService.take(client, client.player.room.inventory, found);                
-            } else {
-                client.console.add(`Can't find that.`);
-            }
+            game.inventoryService.take(client, input);
         }
     });
 
@@ -104,30 +97,19 @@ module.exports.load = (game) => {
         alias: ['leave', 'throw'],
         tip: 'Drop an item from your inventory onto the ground',
         action: (client, input) => {
-            const found = game.itemService.searchFor(client.player.inventory, input);
-            console.log(found);
-            if(found!==false) {
-                client.console.add(`You drop ${client.player.inventory[found].fullName()}`);
-                game.itemService.drop(client, client.player.inventory, found);                
-            } else {
-                client.console.add(`You don't have that.`);
-            }
+            game.inventoryService.drop(client, input);
         }
     });
 
     game.commandService.add('bag', {
         alias: ['inventory'],
         tip: `Review what's in your inventory`,
-        action: (client, input) => {
-            if(client.player.inventory.length) {
-                client.console.add(`You open your bag to find ${client.player.inventory.length} items:`);
-                client.player.inventory.forEach((item, i) => {
-                    client.console.add(`    ${i+1}: ${item.fullName()}`);
-                });
-            } else {
-                client.console.add('You have nothing in your bag.');
-            }
-        }
+        action: (client, input) => { game.playerService.search(client); }
     });
+
+    game.commandService.add('research', { 
+        tip: 'Research a blueprint or item',
+        action: (client, input) => { game.itemService.research(client, input); }
+    })
 
 };
